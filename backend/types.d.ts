@@ -2,6 +2,7 @@ import { Schema } from 'mongoose';
 
 export interface CategoryType {
   name: string;
+  image: string;
 }
 
 export interface IUser {
