@@ -24,7 +24,7 @@ const UserSchema = new Schema<IUser, UserModel, IUserMethods>({
         const user: HydratedDocument<IUser> | null = await User.findOne({ username });
         return !user;
       },
-      message: 'This user is already registered',
+      message: 'пользователь уже существует',
     },
   },
   password: {
