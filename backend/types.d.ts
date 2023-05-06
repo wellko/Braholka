@@ -10,6 +10,7 @@ export interface IUser {
   token: string;
   displayName: string;
   phoneNumber: string;
+  role: string;
 }
 
 export interface dealType {
