@@ -18,7 +18,7 @@ const imageStorage = multer.diskStorage({
 
 const CategoryStorage = multer.diskStorage({
   destination: async (_req, _file, cb) => {
-    const destDir = path.join(config.publicPath, 'images');
+    const destDir = path.join(config.publicPath, 'CategoryImages');
     await fs.mkdir(destDir, { recursive: true });
     cb(null, config.publicPath);
   },
