@@ -4,6 +4,7 @@ import cors = require('cors');
 import config from './config';
 import usersRouter from './routers/Users';
 import CategoriesRouter from './routers/Categories';
+import DealsRouter from './routers/Deals';
 
 const app = express();
 app.use(express.static('public'));
@@ -12,6 +13,7 @@ const port = 8000;
 app.use(express.json());
 app.use('/users', usersRouter);
 app.use('/categories', CategoriesRouter);
+app.use('/deals', DealsRouter);
 const run = async () => {
   mongoose.set('strictQuery', false);
   await mongoose.connect(config.db);
