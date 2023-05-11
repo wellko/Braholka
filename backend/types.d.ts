@@ -11,6 +11,7 @@ export interface IUser {
   token: string;
   displayName: string;
   phoneNumber: string;
+  googleID?: string;
   role: string;
 }
 
