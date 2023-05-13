@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { RegisterMutation } from '../../types';
-import { Avatar, Box, Button, CircularProgress, Container, Grid, Link, TextField, Typography } from '@mui/material';
+import { Alert, Avatar, Box, CircularProgress, Container, Grid, Link, Typography } from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { selectRegisterError, selectRegisterLoading } from './UsersSlice';
 import { register } from './UsersThunks';
 import 'react-phone-number-input/style.css';
-import PhoneInput from 'react-phone-number-input/input';
+import PhoneInput from 'react-phone-number-input';
 import { isValidPhoneNumber } from 'react-phone-number-input';
 
 const Register = () => {
@@ -29,25 +29,17 @@ const Register = () => {
   };
 
   const submitFormHandler = async (event: React.FormEvent) => {
-    event.preventDefault();
     try {
+      event.preventDefault();
       await dispatch(register(state)).unwrap();
       navigate('/');
     } catch (e) {
-      throw new Error();
+      console.log(e);
     }
   };
 
   const phoneChangeHandler = (newPhone: string) => {
     setState((prevState) => ({ ...prevState, phoneNumber: newPhone }));
-  };
-
-  const getFieldError = (fieldName: string) => {
-    try {
-      return error?.errors[fieldName].message;
-    } catch {
-      return undefined;
-    }
   };
 
   return (
@@ -66,40 +58,39 @@ const Register = () => {
         <Typography component="h1" variant="h5">
           Sign up
         </Typography>
-
+        {error && error.errors && error.errors.username ? (
+          <Alert severity="error" sx={{ mt: 3, width: '100%' }}>
+            {error.errors.username.message}
+          </Alert>
+        ) : (
+          error && (
+            <Alert severity="error" sx={{ mt: 3, width: '100%' }}>
+              {error.errors.phoneNumber.message}
+            </Alert>
+          )
+        )}
         <Box component="form" onSubmit={submitFormHandler} sx={{ mt: 3 }}>
-          <Grid container spacing={2}>
+          <Grid container spacing={2} justifyContent="center">
             <Grid container item xs={12}>
-              <TextField
-                sx={{ margin: 'auto' }}
-                label="Username"
-                name="username"
-                autoComplete="new-username"
-                value={state.username}
-                onChange={inputChangeHandler}
-                error={Boolean(getFieldError('username'))}
-                helperText={getFieldError('username')}
-              />
+              <div className="inputbox">
+                <input required name="username" value={state.username} onChange={inputChangeHandler} />
+                <span>Username</span>
+                <i></i>
+              </div>
             </Grid>
             <Grid container item xs={12}>
-              <TextField
-                sx={{ margin: 'auto' }}
-                name="password"
-                label="Password"
-                type="password"
-                autoComplete="new-password"
-                value={state.password}
-                onChange={inputChangeHandler}
-                error={Boolean(getFieldError('password'))}
-                helperText={getFieldError('password')}
-              />
+              <div className="inputbox">
+                <input required name="password" value={state.password} onChange={inputChangeHandler} type="password" />
+                <span>Password</span>
+                <i></i>
+              </div>
             </Grid>
-            <Grid item xs={12}>
+            <Grid item xs={7}>
               <PhoneInput
                 onChange={phoneChangeHandler}
                 defaultCountry={'KG'}
                 international
-                inputStyle={{ padding: '10px' }}
+                inputstyle={{ padding: '10px', fontSize: '20px' }}
                 countryCallingCodeEditable={false}
                 name="phoneNumber"
                 value={state.phoneNumber}
@@ -107,20 +98,18 @@ const Register = () => {
               />
             </Grid>
             <Grid container item xs={12}>
-              <TextField
-                sx={{ margin: 'auto' }}
-                name="displayName"
-                label="Display name"
-                value={state.displayName}
-                onChange={inputChangeHandler}
-                error={Boolean(getFieldError('displayName'))}
-                helperText={getFieldError('displayName')}
-              />
+              <div className="inputbox">
+                <input required name="displayName" value={state.displayName} onChange={inputChangeHandler} />
+                <span>displayName</span>
+                <i></i>
+              </div>
             </Grid>
           </Grid>
-          <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
-            {loading ? <CircularProgress /> : 'Sign Up'}
-          </Button>
+          <Grid container item xs={12}>
+            <button className="btn-form btn-login" type="submit">
+              {loading ? <CircularProgress size={25} /> : 'Sign up'}
+            </button>
+          </Grid>
           <Grid container justifyContent="flex-end">
             <Grid item>
               <Link component={RouterLink} to="/login" variant="body2">

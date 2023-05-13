@@ -1,18 +1,7 @@
 import React, { useState } from 'react';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { LoginMutation } from '../../types';
-import {
-  Alert,
-  Avatar,
-  Box,
-  Button,
-  CircularProgress,
-  Container,
-  Grid,
-  Link,
-  TextField,
-  Typography,
-} from '@mui/material';
+import { Alert, Avatar, Box, CircularProgress, Container, Grid, Link, Typography } from '@mui/material';
 import LockOpenIcon from '@mui/icons-material/LockOpen';
 import { googleLogin, login } from './UsersThunks';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
@@ -34,9 +23,13 @@ const Login = () => {
   };
 
   const submitFormHandler = async (event: React.FormEvent) => {
-    event.preventDefault();
-    await dispatch(login(state)).unwrap();
-    navigate('/');
+    try {
+      event.preventDefault();
+      await dispatch(login(state)).unwrap();
+      navigate('/');
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   const googleLoginHandler = async (credential: string) => {
@@ -68,30 +61,39 @@ const Login = () => {
         <Box component="form" onSubmit={submitFormHandler} sx={{ mt: 3 }}>
           <Grid container spacing={2}>
             <Grid container item xs={12}>
-              <TextField
-                sx={{ margin: 'auto' }}
-                label="Username"
-                name="username"
-                autoComplete="current-username"
-                value={state.username}
-                onChange={inputChangeHandler}
-              />
+              <div className="inputbox">
+                <input
+                  required
+                  name="username"
+                  autoComplete="current-username"
+                  value={state.username}
+                  onChange={inputChangeHandler}
+                  type="text"
+                />
+                <span>Username</span>
+                <i></i>
+              </div>
             </Grid>
             <Grid container item xs={12}>
-              <TextField
-                sx={{ margin: 'auto' }}
-                label="Password"
-                name="password"
-                type="password"
-                autoComplete="current-password"
-                value={state.password}
-                onChange={inputChangeHandler}
-              />
+              <div className="inputbox">
+                <input
+                  required
+                  name="password"
+                  type="password"
+                  autoComplete="current-password"
+                  value={state.password}
+                  onChange={inputChangeHandler}
+                />
+                <span>Password</span>
+                <i></i>
+              </div>
             </Grid>
           </Grid>
-          <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
-            {loading ? <CircularProgress /> : 'Sign In'}
-          </Button>
+          <Grid container item xs={12}>
+            <button className="btn-form btn-login" type="submit">
+              {loading ? <CircularProgress size={25} /> : 'Sign In'}
+            </button>
+          </Grid>
           <Grid container justifyContent="flex-end">
             <Grid item>
               <Link component={RouterLink} to="/register" variant="body2">

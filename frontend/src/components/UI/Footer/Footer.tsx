@@ -9,7 +9,7 @@ const Footer = () => {
   return (
     <div>
       <Box sx={{ flexGrow: 1, mt: 1 }}>
-        <AppBar position="static">
+        <AppBar position="static" sx={{ bgcolor: '#8707ff' }}>
           <Toolbar sx={{ paddingY: '10px' }}>
             <Container>
               <Grid container justifyContent="space-between" alignItems="center">
