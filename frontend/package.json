@@ -51,7 +51,10 @@
     "eslint-plugin-react": "^7.32.2",
     "eslint-plugin-react-hooks": "^4.6.0",
     "i18next-browser-languagedetector": "^7.0.1",
-    "prettier": "2.8.4"
+    "prettier": "2.8.4",
+    "sass": "^1.62.1",
+    "sass-loader": "^13.2.2",
+    "webpack": "^5.82.1"
   },
   "browserslist": {
     "production": [

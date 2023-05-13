@@ -1,0 +1,78 @@
+@use "../var/colors" as *;
+
+.card p {
+  font-size: 27px;
+  font-weight: 400;
+  line-height: 20px;
+  color: #666;
+}
+
+.card img {
+  width: 100%;
+}
+
+.card p.small {
+  font-size: 14px;
+}
+
+.go-corner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  width: 60px;
+  height: 60px;
+  overflow: hidden;
+  top: 0;
+  right: 0;
+  background-color: $purple;
+  border-radius: 0 4px 0 60px;
+}
+
+.go-arrow {
+  margin-top: -4px;
+  margin-right: -4px;
+  color: white;
+}
+
+.card1 {
+  display: block;
+  position: relative;
+  max-width: 420px;
+  background-color: #f2f8f9;
+  border-radius: 4px;
+  padding: 32px 24px;
+  margin: 12px;
+  text-decoration: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.card1:before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  top: -30px;
+  right: -30px;
+  background: $purple;
+  height: 60px;
+  width: 60px;
+  border-radius: 50%;
+  transform: scale(1);
+  transform-origin: 50% 50%;
+  transition: transform 0.25s ease-out;
+}
+
+.card1:hover:before {
+  transform: scale(30);
+}
+
+.card1:hover p {
+  transition: all 0.3s ease-out;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.card1:hover h3 {
+  transition: all 0.3s ease-out;
+  color: #fff;
+}
