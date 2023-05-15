@@ -38,3 +38,24 @@ export interface LoginMutation {
 export interface GlobalError {
   error: string;
 }
+
+export interface CategoryType {
+  name: string;
+  image: string;
+}
+
+export interface DealTypeProps {
+  title: string;
+  description: string;
+  purchasePrice: number;
+  image: string;
+  condition: string;
+  category: CategoryType;
+  owner: User;
+}
+
+export interface DealType extends DealTypeProps {
+  category: string;
+  owner: string;
+  image: File | null;
+}
