@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { DealType } from '../../../types';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import { selectUser } from '../../users/UsersSlice';
@@ -6,10 +6,13 @@ import { MenuItem, TextField } from '@mui/material';
 import { conditionArray } from '../../../constants';
 import FileInput from '../../../components/UI/FileInput/FileInput';
 import { createDeal } from '../DealsThunks';
+import { getCategories } from '../../categories/CategoriesThunks';
+import { selectCategories } from '../../categories/CategoriesSlice';
 
 const DealsForm = () => {
   const dispatch = useAppDispatch();
   const user = useAppSelector(selectUser);
+  const categories = useAppSelector(selectCategories);
   const initialState: DealType = {
     title: '',
     description: '',
@@ -21,6 +24,10 @@ const DealsForm = () => {
   };
 
   const [state, setState] = useState<DealType>(initialState);
+
+  useEffect(() => {
+    dispatch(getCategories());
+  }, [dispatch]);
 
   const onSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -97,11 +104,12 @@ const DealsForm = () => {
         onChange={inputChangeHandler}
         required
       >
-        {conditionArray.map((el) => (
-          <MenuItem key={el} value={el}>
-            {el}
-          </MenuItem>
-        ))}
+        {categories &&
+          categories.map((el) => (
+            <MenuItem key={el.name} value={el._id}>
+              {el.name}
+            </MenuItem>
+          ))}
       </TextField>
 
       <div className="form_input_group">
