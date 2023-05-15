@@ -4,6 +4,7 @@ import { FLUSH, PAUSE, PERSIST, PURGE, REGISTER, REHYDRATE } from 'redux-persist
 import storage from 'redux-persist/lib/storage';
 import { usersReducer } from '../features/users/UsersSlice';
 import { dealsReducer } from '../features/deals/DealsSlice';
+import { categoryReducer } from '../features/categories/CategoriesSlice';
 
 const usersPersistConfig = {
   key: 'nanafo:users',
@@ -14,6 +15,7 @@ const usersPersistConfig = {
 const rootReducer = combineReducers({
   users: persistReducer(usersPersistConfig, usersReducer),
   deals: dealsReducer,
+  categories: categoryReducer,
 });
 
 export const store = configureStore({

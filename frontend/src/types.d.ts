@@ -39,7 +39,8 @@ export interface GlobalError {
   error: string;
 }
 
-export interface CategoryType {
+export interface CategoryTypeProps {
+  _id: string;
   name: string;
   image: string;
 }
@@ -57,5 +58,10 @@ export interface DealTypeProps {
 export interface DealType extends DealTypeProps {
   category: string;
   owner: string;
+  image: File | null;
+}
+
+export interface CategoryType {
+  name: string;
   image: File | null;
 }
