@@ -9,6 +9,7 @@ import ProtectedRoute from './components/UI/ProtectedRoute/ProtectedRoute';
 import { useAppSelector } from './app/hooks';
 import { selectUser } from './features/users/UsersSlice';
 import DealsPage from './features/deals/DealsPage';
+import CategoriesForm from './features/categories/components/CategoriesForm';
 
 function App() {
   const user = useAppSelector(selectUser);
@@ -18,6 +19,7 @@ function App() {
       <CssBaseline />
       <Layout>
         <Routes>
+          <Route path="*" element={<h1>Page not Found</h1>} />
           <Route path={'/'} element={<DealsPage />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
@@ -26,6 +28,14 @@ function App() {
             element={
               <ProtectedRoute isAllowed={user && Boolean(user)}>
                 <DealsForm />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/addCategory"
+            element={
+              <ProtectedRoute isAllowed={user && user.role === 'admin'}>
+                <CategoriesForm />
               </ProtectedRoute>
             }
           />

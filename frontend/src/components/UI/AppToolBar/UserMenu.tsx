@@ -28,6 +28,22 @@ const UserMenu: React.FC<Props> = ({ user }) => {
       </Button>
       <Menu anchorEl={anchorEl} keepMounted open={Boolean(anchorEl)} onClose={handleClose}>
         <MenuItem
+          onClick={() => {
+            navigate('/addDeal');
+          }}
+        >
+          Создать сделку
+        </MenuItem>
+        {user.role === 'admin' ? (
+          <MenuItem
+            onClick={() => {
+              navigate('/addCategory');
+            }}
+          >
+            Создать категорию
+          </MenuItem>
+        ) : null}
+        <MenuItem
           onClick={async () => {
             await dispatch(logoutAction());
             navigate('/');
