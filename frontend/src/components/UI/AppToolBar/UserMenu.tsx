@@ -24,7 +24,7 @@ const UserMenu: React.FC<Props> = ({ user }) => {
   return (
     <>
       <Button sx={{ paddingBottom: '10px' }} onClick={handleClick} color="inherit">
-        Hello, {user.displayName}
+        Привет, {user.displayName}
       </Button>
       <Menu anchorEl={anchorEl} keepMounted open={Boolean(anchorEl)} onClose={handleClose}>
         <MenuItem
@@ -33,7 +33,7 @@ const UserMenu: React.FC<Props> = ({ user }) => {
             navigate('/');
           }}
         >
-          Log Out
+          Выйти
         </MenuItem>
       </Menu>
     </>
