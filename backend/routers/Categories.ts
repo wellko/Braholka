@@ -4,6 +4,7 @@ import permit from '../middleware/permit';
 import mongoose from 'mongoose';
 import { CategoryImagesUpload } from '../multer';
 import Deal from '../models/Deal';
+import auth from '../middleware/auth';
 
 const CategoriesRouter = express.Router();
 
@@ -16,7 +17,7 @@ CategoriesRouter.get('/', async (req, res, next) => {
   }
 });
 
-CategoriesRouter.post('/', permit('admin'), CategoryImagesUpload.single('image'), async (req, res, next) => {
+CategoriesRouter.post('/', auth, permit('admin'), CategoryImagesUpload.single('image'), async (req, res, next) => {
   try {
     const newCategory = await Category.create({
       name: req.body.name,
@@ -32,7 +33,7 @@ CategoriesRouter.post('/', permit('admin'), CategoryImagesUpload.single('image')
   }
 });
 
-CategoriesRouter.delete('/:id', permit('admin'), async (req, res, next) => {
+CategoriesRouter.delete('/:id', auth, permit('admin'), async (req, res, next) => {
   try {
     const deals = await Deal.find({ category: req.params.id });
     if (deals) {
