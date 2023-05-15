@@ -280,6 +280,10 @@ template {
   margin: 20px auto;
 }
 
+.card {
+  height: 100%;
+}
+
 .card p {
   font-size: 27px;
   font-weight: 400;
@@ -316,6 +320,7 @@ template {
 }
 
 .card1 {
+  height: 100%;
   display: block;
   position: relative;
   max-width: 420px;
