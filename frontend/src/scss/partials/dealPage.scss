@@ -1,0 +1,11 @@
+@use "../var/colors" as *;
+
+.dealPage-header {
+  text-align: center;
+  font-size: 40px;
+  color: $purple;
+}
+
+.dealPage-image {
+  float: left;
+}
