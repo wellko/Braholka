@@ -46,6 +46,7 @@ export interface CategoryTypeProps {
 }
 
 export interface DealTypeProps {
+  _id: string;
   title: string;
   description: string;
   purchasePrice: number;
@@ -55,7 +56,7 @@ export interface DealTypeProps {
   owner: User;
 }
 
-export interface DealType extends DealTypeProps {
+export interface DealType extends Omit<DealTypeProps, '_id'> {
   category: string;
   owner: string;
   image: File | null;

@@ -10,6 +10,7 @@ import { useAppSelector } from './app/hooks';
 import { selectUser } from './features/users/UsersSlice';
 import DealsPage from './features/deals/DealsPage';
 import CategoriesForm from './features/categories/components/CategoriesForm';
+import DealPage from './features/deals/DealPage';
 
 function App() {
   const user = useAppSelector(selectUser);
@@ -23,6 +24,7 @@ function App() {
           <Route path={'/'} element={<DealsPage />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/deals/:id" element={<DealPage />} />
           <Route
             path="/addDeal"
             element={
