@@ -1,7 +1,7 @@
 import { DealTypeProps, ValidationError } from '../../types';
 import { createSlice } from '@reduxjs/toolkit';
 import { RootState } from '../../app/store';
-import { createDeal, getDeals } from './DealsThunks';
+import { createDeal, getDeals, getOneDeal } from './DealsThunks';
 
 interface DealsState {
   deals: DealTypeProps[] | null;
@@ -35,6 +35,16 @@ export const DealsSlice = createSlice({
     builder.addCase(createDeal.rejected, (state, { payload: error }) => {
       state.loading = false;
       state.createError = error || null;
+    });
+    builder.addCase(getOneDeal.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(getOneDeal.fulfilled, (state, { payload: deal }) => {
+      state.loading = false;
+      state.deal = deal;
+    });
+    builder.addCase(getOneDeal.rejected, (state) => {
+      state.loading = false;
     });
   },
 });

@@ -10,7 +10,7 @@ const DealsCard: React.FC<props> = ({ deal }) => {
   const imagePath = apiUrl + deal.image;
   return (
     <div className="card">
-      <a className="card1" href="#">
+      <a className="card1" href={'/deals/' + deal._id}>
         <img src={imagePath} alt={deal.title} />
         <p>{deal.title}</p>
         <p className="small">{deal.category.name}</p>

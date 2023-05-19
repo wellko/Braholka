@@ -12,6 +12,15 @@ export const getDeals = createAsyncThunk<DealTypeProps[]>('deals/getAll', async 
   }
 });
 
+export const getOneDeal = createAsyncThunk<DealTypeProps, string>('deals/getOne', async (id) => {
+  try {
+    const response = await axiosApi.get<DealTypeProps>('deals/' + id);
+    return response.data;
+  } catch {
+    throw new Error();
+  }
+});
+
 export const createDeal = createAsyncThunk<void, DealType, { rejectValue: ValidationError }>(
   'deals/createDeal',
   async (dealData, { rejectWithValue }) => {
