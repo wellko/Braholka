@@ -24,7 +24,7 @@ DealsRouter.get('/', async (req, res, next) => {
 
 DealsRouter.get('/:id', async (req, res, next) => {
   try {
-    const response = await Deal.findById(req.params.id).populate({ path: 'category' });
+    const response = await Deal.findById(req.params.id).populate([{ path: 'category' }, { path: 'owner' }]);
     res.send(response);
   } catch (e) {
     return next(e);
