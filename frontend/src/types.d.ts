@@ -11,6 +11,7 @@ export interface User {
   token: string;
   role: string;
   displayName: string;
+  phoneNumber: string;
 }
 
 export interface RegisterResponse {
@@ -65,4 +66,14 @@ export interface DealType extends Omit<DealTypeProps, '_id'> {
 export interface CategoryType {
   name: string;
   image: File | null;
+}
+
+export interface MessageType {
+  date: Date;
+  to?: User;
+  type: string;
+  text: string;
+  author: User;
+  room: string;
+  whisper: boolean;
 }

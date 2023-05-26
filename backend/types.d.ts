@@ -38,13 +38,8 @@ export interface MessageType {
   text: string;
   author: string;
   room: string;
-}
-
-export interface WhisperType {
-  text: string;
   to: string;
-  date: Date;
-  author: string;
+  whisper: boolean;
 }
 
 export interface IncomingMessage {
