@@ -6,15 +6,15 @@ import usersRouter from './routers/Users';
 import CategoriesRouter from './routers/Categories';
 import DealsRouter from './routers/Deals';
 import expressWs from 'express-ws';
-import { ActiveConnections, dealType, IncomingMessage, MessageType, WhisperType } from './types';
+import { ActiveConnections, dealType, IncomingMessage, MessageType } from './types';
 import Message from './models/Message';
 import User from './models/User';
 import Deal from './models/Deal';
 
 const app = express();
+expressWs(app);
 app.use(express.static('public'));
 app.use(cors());
-expressWs(app);
 const router = express.Router();
 const activeConnections: ActiveConnections = {};
 const port = 8000;
@@ -22,6 +22,7 @@ app.use(express.json());
 app.use('/users', usersRouter);
 app.use('/categories', CategoriesRouter);
 app.use('/deals', DealsRouter);
+app.use(router);
 const run = async () => {
   mongoose.set('strictQuery', false);
   await mongoose.connect(config.db);
@@ -33,14 +34,15 @@ const run = async () => {
   });
 };
 
-router.ws('/chat/:room', async (ws, req) => {
+router.ws('/chat/:room/:id', async (ws, req) => {
   const { room } = req.params;
-  const id = req.body.id;
+  const { id } = req.params;
+  console.log('connected' + id);
   if (!activeConnections[room]) {
     activeConnections[room] = {};
   }
   activeConnections[room][id] = ws;
-  const messages = await Message.find({ room }).sort({ _id: -1 }).limit(30).populate('author', 'displayName');
+  const messages = await Message.find({ room }).sort({ date: 1 }).limit(30).populate('author', 'displayName');
   ws.send(
     JSON.stringify({
       type: 'EXISTING_MESSAGES',
@@ -57,11 +59,11 @@ router.ws('/chat/:room', async (ws, req) => {
       case 'SEND_NUMBER':
         try {
           const deal = (await Deal.findById(room)) as dealType;
-          const decodedMessage = JSON.parse(msg.toString()) as WhisperType;
+          const decodedMessage = JSON.parse(msg.toString()) as MessageType;
           if (JSON.stringify(deal.owner) === JSON.stringify(decodedMessage.author)) {
             const whisperMessage = new Message({
               author: decodedMessage.author,
-              text: decodedMessage.text,
+              text: 'Меня заинтересовало ваше предложение мой номер : ' + decodedMessage.text,
               room,
               whisperTo: decodedMessage.to,
               date: Date.now(),
@@ -76,6 +78,7 @@ router.ws('/chat/:room', async (ws, req) => {
                   to: decodedMessage.to,
                   text: decodedMessage.text,
                   date: Date.now(),
+                  whisper: true,
                 },
               }),
             );
