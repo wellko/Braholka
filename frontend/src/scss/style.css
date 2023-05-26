@@ -3,12 +3,7 @@
 @use "partials/btn";
 @use "partials/card";
 @use "partials/form";
-@use "partials/dot-spinner";
-@use "partials/dealPage";
-
-.logo {
-  max-width: 200px;
-  max-height: 100px;
-}
+@use "partials/logo";
+@use "partials/chat";
 
 /*# sourceMappingURL=style.css.map */
