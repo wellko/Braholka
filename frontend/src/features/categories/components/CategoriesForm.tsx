@@ -4,9 +4,11 @@ import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import FileInput from '../../../components/UI/FileInput/FileInput';
 import { createCategory } from '../CategoriesThunks';
 import { selectCategoriesError } from '../CategoriesSlice';
+import { useNavigate } from 'react-router-dom';
 
 const CategoriesForm = () => {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const error = useAppSelector(selectCategoriesError);
   const initialState: CategoryType = {
     name: '',
@@ -17,7 +19,8 @@ const CategoriesForm = () => {
 
   const onSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-    dispatch(createCategory(state));
+    await dispatch(createCategory(state));
+    navigate('/');
   };
 
   const inputChangeHandler = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {

@@ -8,9 +8,11 @@ import FileInput from '../../../components/UI/FileInput/FileInput';
 import { createDeal } from '../DealsThunks';
 import { getCategories } from '../../categories/CategoriesThunks';
 import { selectCategories } from '../../categories/CategoriesSlice';
+import { useNavigate } from 'react-router-dom';
 
 const DealsForm = () => {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const user = useAppSelector(selectUser);
   const categories = useAppSelector(selectCategories);
   const initialState: DealType = {
@@ -31,7 +33,8 @@ const DealsForm = () => {
 
   const onSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-    dispatch(createDeal(state));
+    await dispatch(createDeal(state));
+    navigate('/');
   };
 
   const inputChangeHandler = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
