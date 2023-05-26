@@ -14,9 +14,18 @@ DealsRouter.get('/', async (req, res, next) => {
       const dealResponse = await Deal.find({ category: categoryQuery });
       res.send(dealResponse);
     } else {
-      const dealResponse = await Deal.find();
+      const dealResponse = await Deal.find().populate({ path: 'category' });
       res.send(dealResponse);
     }
+  } catch (e) {
+    return next(e);
+  }
+});
+
+DealsRouter.get('/:id', async (req, res, next) => {
+  try {
+    const response = await Deal.findById(req.params.id).populate({ path: 'category' });
+    res.send(response);
   } catch (e) {
     return next(e);
   }

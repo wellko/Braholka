@@ -1,7 +1,9 @@
+@use "../var/colors" as *;
+
 .dot-spinner {
   --uib-size: 2.8rem;
   --uib-speed: .9s;
-  --uib-color: #FFF;
+  --uib-color: $purple;
   position: relative;
   display: flex;
   align-items: center;
@@ -26,7 +28,7 @@
   height: 20%;
   width: 20%;
   border-radius: 50%;
-  background-color: var(--uib-color);
+  background-color: $purple;
   transform: scale(0);
   opacity: 0.5;
   animation: pulse0112 calc(var(--uib-speed) * 1.111) ease-in-out infinite;
