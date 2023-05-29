@@ -37,12 +37,25 @@ const run = async () => {
 router.ws('/chat/:room/:id', async (ws, req) => {
   const { room } = req.params;
   const { id } = req.params;
-  console.log('connected' + id);
+  console.log('connected ' + id);
   if (!activeConnections[room]) {
     activeConnections[room] = {};
   }
   activeConnections[room][id] = ws;
-  const messages = await Message.find({ room }).sort({ date: 1 }).limit(30).populate('author', 'displayName');
+  const messages = await Message.find({
+    $or: [
+      { room, whisper: false },
+      { room, whisper: true, author: id },
+      {
+        room,
+        whisper: true,
+        to: id,
+      },
+    ],
+  })
+    .sort({ date: 1 })
+    .limit(30)
+    .populate('author to', 'displayName');
   ws.send(
     JSON.stringify({
       type: 'EXISTING_MESSAGES',
@@ -59,24 +72,40 @@ router.ws('/chat/:room/:id', async (ws, req) => {
       case 'SEND_NUMBER':
         try {
           const deal = (await Deal.findById(room)) as dealType;
-          const decodedMessage = JSON.parse(msg.toString()) as MessageType;
-          if (JSON.stringify(deal.owner) === JSON.stringify(decodedMessage.author)) {
+          const messagePayload = decodedMessage.payload as MessageType;
+          const author = await User.findById(messagePayload.author);
+          const receiver = await User.findById(messagePayload.to);
+          if (JSON.stringify(deal.owner) === JSON.stringify(messagePayload.author)) {
             const whisperMessage = new Message({
-              author: decodedMessage.author,
-              text: 'Меня заинтересовало ваше предложение мой номер : ' + decodedMessage.text,
+              author: messagePayload.author,
+              text: 'Меня заинтересовало ваше предложение мой номер : ' + messagePayload.text,
               room,
-              whisperTo: decodedMessage.to,
+              to: messagePayload.to,
               date: Date.now(),
               whisper: true,
             });
             await whisperMessage.save();
-            ws.send(
+            activeConnections[room][messagePayload.author].send(
               JSON.stringify({
                 type: 'NEW_MESSAGE',
                 payload: {
-                  author: decodedMessage.author,
-                  to: decodedMessage.to,
-                  text: decodedMessage.text,
+                  room,
+                  author: author,
+                  to: receiver,
+                  text: 'Меня заинтересовало ваше предложение мой номер : ' + messagePayload.text,
+                  date: Date.now(),
+                  whisper: true,
+                },
+              }),
+            );
+            activeConnections[room][messagePayload.to].send(
+              JSON.stringify({
+                type: 'NEW_MESSAGE',
+                payload: {
+                  room,
+                  author: author,
+                  to: receiver,
+                  text: 'Меня заинтересовало ваше предложение мой номер : ' + messagePayload.text,
                   date: Date.now(),
                   whisper: true,
                 },

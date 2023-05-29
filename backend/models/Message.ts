@@ -23,11 +23,19 @@ const MessageSchema = new Schema({
       validator: async (value: Types.ObjectId) => User.findById(value),
       message: 'User not found!',
     },
-    whisper: {
-      type: Boolean,
-      required: true,
-      default: false,
+  },
+  to: {
+    type: Schema.Types.ObjectId,
+    ref: 'User',
+    validate: {
+      validator: async (value: Types.ObjectId) => User.findById(value),
+      message: 'User not found!',
     },
+  },
+  whisper: {
+    type: Boolean,
+    required: true,
+    default: false,
   },
 });
 
