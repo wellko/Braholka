@@ -83,14 +83,19 @@ const Chat = () => {
           <Paper sx={{ mb: 2 }} elevation={1} key={Math.random()}>
             <Grid sx={{ overflow: 'hidden' }} container justifyContent="space-between">
               {el.whisper ? (
-                <Typography sx={{ wordWrap: 'break-word' }}>
-                  {dayjs(el.date).format('YYYY-MM-DD HH:mm')} <br /> <b>{el.author.displayName}:</b> {el.text}
+                <Typography sx={{ wordWrap: 'break-word', color: '#D320B4' }}>
+                  {dayjs(el.date).format('YYYY-MM-DD HH:mm')} <br />
+                  <b>
+                    {JSON.stringify(el.to!._id) === JSON.stringify(user!._id)
+                      ? 'From ' + el.author.displayName + ': '
+                      : 'to ' + (el.to && el.to.displayName)}
+                  </b>{' '}
+                  {el.text}
                 </Typography>
               ) : (
                 <>
                   <Typography sx={{ wordWrap: 'break-word' }}>
-                    {dayjs(el.date).format('YYYY-MM-DD HH:mm')} <br /> <b>{el.author.displayName} eto ne whisper:</b>{' '}
-                    {el.text}
+                    {dayjs(el.date).format('YYYY-MM-DD HH:mm')} <br /> <b>{el.author.displayName} : </b> {el.text}
                   </Typography>
                   {author && el.author._id !== user!._id && (
                     <Button
