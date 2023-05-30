@@ -92,7 +92,7 @@ const Chat = () => {
                         <b>
                           {JSON.stringify(el.to && el.to._id) === JSON.stringify(user._id)
                             ? 'From ' + el.author.displayName + ': '
-                            : 'to ' + (el.to && el.to.displayName)}
+                            : 'to ' + (el.to && el.to.displayName) + ': '}
                         </b>
                         {el.text}
                       </Typography>
