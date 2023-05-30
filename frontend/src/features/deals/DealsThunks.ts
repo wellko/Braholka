@@ -12,6 +12,18 @@ export const getDeals = createAsyncThunk<DealTypeProps[]>('deals/getAll', async 
   }
 });
 
+export const getDealsByCategory = createAsyncThunk<DealTypeProps[], string>(
+  'deals/getByCategory',
+  async (category_id) => {
+    try {
+      const response = await axiosApi.get<DealTypeProps[]>('deals?category=' + category_id);
+      return response.data;
+    } catch {
+      throw new Error();
+    }
+  },
+);
+
 export const getOneDeal = createAsyncThunk<DealTypeProps, string>('deals/getOne', async (id) => {
   try {
     const response = await axiosApi.get<DealTypeProps>('deals/' + id);
