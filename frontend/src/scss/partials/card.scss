@@ -13,6 +13,10 @@
 
 .card img {
   width: 100%;
+  border-radius: 50%;
+  max-height: 150px;
+  object-fit: cover;
+  border: 2px solid black;
 }
 
 .card p.small {
