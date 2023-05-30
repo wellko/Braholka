@@ -81,41 +81,45 @@ const Chat = () => {
       <Box height="600px" sx={{ overflowY: 'scroll', overflowWrap: 'break-word' }} className="chat-container">
         <h2 className="chat-title">Чат</h2>
         {user ? (
-          <>
-            {messages.map((el) => (
-              <Paper sx={{ mb: 2 }} elevation={1} key={Math.random()}>
-                <Grid sx={{ overflow: 'hidden' }} container justifyContent="space-between">
-                  {el.whisper ? (
-                    <Typography sx={{ wordWrap: 'break-word', color: '#D320B4' }}>
-                      {dayjs(el.date).format('YYYY-MM-DD HH:mm')} <br />
-                      <b>
-                        {JSON.stringify(el.to && el.to._id) === JSON.stringify(user._id)
-                          ? 'From ' + el.author.displayName + ': '
-                          : 'to ' + (el.to && el.to.displayName)}
-                      </b>
-                      {el.text}
-                    </Typography>
-                  ) : (
-                    <>
-                      <Typography sx={{ wordWrap: 'break-word' }}>
+          messages.length ? (
+            <>
+              {messages.map((el) => (
+                <Paper sx={{ mb: 2 }} elevation={1} key={Math.random()}>
+                  <Grid sx={{ overflow: 'hidden' }} container justifyContent="space-between">
+                    {el.whisper ? (
+                      <Typography sx={{ wordWrap: 'break-word', color: '#D320B4' }}>
                         {dayjs(el.date).format('YYYY-MM-DD HH:mm')} <br />
-                        <b>{el.author.displayName} : </b> {el.text}
+                        <b>
+                          {JSON.stringify(el.to && el.to._id) === JSON.stringify(user._id)
+                            ? 'From ' + el.author.displayName + ': '
+                            : 'to ' + (el.to && el.to.displayName)}
+                        </b>
+                        {el.text}
                       </Typography>
-                      {author && el.author._id !== user._id && (
-                        <Button
-                          onClick={() => {
-                            WhisperSender(el.author._id);
-                          }}
-                        >
-                          отправить свой номер
-                        </Button>
-                      )}
-                    </>
-                  )}
-                </Grid>
-              </Paper>
-            ))}
-          </>
+                    ) : (
+                      <>
+                        <Typography sx={{ wordWrap: 'break-word' }}>
+                          {dayjs(el.date).format('YYYY-MM-DD HH:mm')} <br />
+                          <b>{el.author.displayName} : </b> {el.text}
+                        </Typography>
+                        {author && el.author._id !== user._id && (
+                          <Button
+                            onClick={() => {
+                              WhisperSender(el.author._id);
+                            }}
+                          >
+                            отправить свой номер
+                          </Button>
+                        )}
+                      </>
+                    )}
+                  </Grid>
+                </Paper>
+              ))}
+            </>
+          ) : (
+            <p>Пока нет сообщений</p>
+          )
         ) : (
           <h3>Для использования чата войдите в свой аккаунт</h3>
         )}
