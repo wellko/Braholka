@@ -1,18 +1,14 @@
 import React, { useState } from 'react';
 import { CategoryType } from '../../../types';
-import { useAppDispatch, useAppSelector } from '../../../app/hooks';
-import FileInput from '../../../components/UI/FileInput/FileInput';
+import { useAppDispatch } from '../../../app/hooks';
 import { createCategory } from '../CategoriesThunks';
-import { selectCategoriesError } from '../CategoriesSlice';
 import { useNavigate } from 'react-router-dom';
 
 const CategoriesForm = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const error = useAppSelector(selectCategoriesError);
   const initialState: CategoryType = {
     name: '',
-    image: null,
   };
 
   const [state, setState] = useState<CategoryType>(initialState);
@@ -26,14 +22,6 @@ const CategoriesForm = () => {
   const inputChangeHandler = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = event.target;
     setState((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const fileInputChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, files } = e.target;
-    setState((prev) => ({
-      ...prev,
-      [name]: files && files[0] ? files[0] : null,
-    }));
   };
 
   return (
@@ -54,7 +42,6 @@ const CategoriesForm = () => {
           Название :
         </label>
       </div>
-      <FileInput onChange={fileInputChangeHandler} name="image" label="Загрузите картинку" error={error} />
       <button className="btn-form btn-create" type="submit">
         Создать
       </button>
