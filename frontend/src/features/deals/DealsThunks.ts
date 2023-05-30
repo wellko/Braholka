@@ -1,5 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { DealType, DealTypeProps, ValidationError } from '../../types';
+import { DealType, DealTypeProps, DealTypeWithId, GlobalSuccess, ValidationError } from '../../types';
 import axiosApi from '../../axios-api';
 import { isAxiosError } from 'axios';
 
@@ -24,6 +24,18 @@ export const getDealsByCategory = createAsyncThunk<DealTypeProps[], string>(
   },
 );
 
+export const editDeal = createAsyncThunk<GlobalSuccess, DealTypeWithId>('deals/edit', async (dealData) => {
+  const formData = new FormData();
+  const keys = Object.keys(dealData) as (keyof DealType)[];
+  keys.forEach((key) => {
+    const value = dealData[key];
+    if (value !== null) {
+      formData.append(key, value as string | Blob);
+    }
+  });
+  const response = await axiosApi.patch('/deals/' + dealData._id, formData);
+  return response.data;
+});
 export const getOneDeal = createAsyncThunk<DealTypeProps, string>('deals/getOne', async (id) => {
   try {
     const response = await axiosApi.get<DealTypeProps>('deals/' + id);

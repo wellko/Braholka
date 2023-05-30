@@ -1,5 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { CategoryType, CategoryTypeProps, ValidationError } from '../../types';
+import { CategoryMutation, CategoryTypeProps, ValidationError } from '../../types';
 import axiosApi from '../../axios-api';
 import { isAxiosError } from 'axios';
 
@@ -12,19 +12,11 @@ export const getCategories = createAsyncThunk<CategoryTypeProps[]>('categories/g
   }
 });
 
-export const createCategory = createAsyncThunk<void, CategoryType, { rejectValue: ValidationError }>(
+export const createCategory = createAsyncThunk<void, CategoryMutation, { rejectValue: ValidationError }>(
   'categories/createCategory',
   async (CategoryData, { rejectWithValue }) => {
     try {
-      const formData = new FormData();
-      const keys = Object.keys(CategoryData) as (keyof CategoryType)[];
-      keys.forEach((key) => {
-        const value = CategoryData[key];
-        if (value !== null) {
-          formData.append(key, value as string | Blob);
-        }
-      });
-      await axiosApi.post('/categories', formData);
+      await axiosApi.post('/categories', CategoryData);
     } catch (e) {
       if (isAxiosError(e) && e.response && e.response.status === 400) {
         return rejectWithValue(e.response.data as ValidationError);
