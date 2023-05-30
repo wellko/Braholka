@@ -26,6 +26,14 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/deals/:id" element={<DealPage />} />
           <Route
+            path="/deals/:id/edit"
+            element={
+              <ProtectedRoute isAllowed={user && Boolean(user)}>
+                <DealsForm />
+              </ProtectedRoute>
+            }
+          />
+          <Route
             path="/addDeal"
             element={
               <ProtectedRoute isAllowed={user && Boolean(user)}>
