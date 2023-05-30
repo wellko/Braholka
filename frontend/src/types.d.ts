@@ -19,6 +19,10 @@ export interface RegisterResponse {
   user: User;
 }
 
+export interface GlobalSuccess {
+  message: string;
+}
+
 export interface ValidationError {
   errors: {
     [key: string]: {
@@ -64,7 +68,16 @@ export interface DealType extends Omit<DealTypeProps, '_id'> {
   image: File | null;
 }
 
+export interface DealTypeWithId extends DealType {
+  _id: string;
+}
+
 export interface CategoryType {
+  _id: string;
+  name: string;
+}
+
+export interface CategoryMutation {
   name: string;
 }
 
