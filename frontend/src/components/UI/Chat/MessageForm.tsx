@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
-import { Button, Grid, Paper, TextField } from '@mui/material';
+import { Grid, Paper, TextField } from '@mui/material';
+import { useAppSelector } from '../../../app/hooks';
+import { selectUser } from '../../../features/users/UsersSlice';
 
 interface props {
   submitFormHandler: (arg: string) => void;
 }
 
 const MessageForm: React.FC<props> = ({ submitFormHandler }) => {
+  const user = useAppSelector(selectUser);
   const [state, setState] = useState<{ text: string }>({
     text: '',
   });
@@ -26,15 +29,16 @@ const MessageForm: React.FC<props> = ({ submitFormHandler }) => {
           <Grid container item xs={12} alignContent="">
             <TextField
               sx={{ margin: 'auto', width: '60%' }}
-              label="Message"
+              label={user ? 'Сообщение' : 'недоступно'}
               name="text"
               value={state.text}
               onChange={inputChangeHandler}
+              disabled={!user}
               required
             />
-            <Button type="submit" color="primary" variant="contained">
-              Send
-            </Button>
+            <button className="btn-form" type="submit" disabled={!user}>
+              Отправить
+            </button>
           </Grid>
         </Grid>
       </form>

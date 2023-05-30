@@ -77,54 +77,62 @@ const Chat = () => {
   };
 
   return (
-    user && (
-      <div className="chat-main">
-        <Grid
-          item
-          xs={8}
-          height="700px"
-          sx={{ overflowY: 'scroll', overflowWrap: 'break-word' }}
-          className="chat-container"
-        >
-          {messages.map((el) => (
-            <Paper sx={{ mb: 2 }} elevation={1} key={Math.random()}>
-              <Grid sx={{ overflow: 'hidden' }} container justifyContent="space-between">
-                {el.whisper ? (
-                  <Typography sx={{ wordWrap: 'break-word', color: '#D320B4' }}>
-                    {dayjs(el.date).format('YYYY-MM-DD HH:mm')} <br />
-                    <b>
-                      {JSON.stringify(el.to && el.to._id) === JSON.stringify(user._id)
-                        ? 'From ' + el.author.displayName + ': '
-                        : 'to ' + (el.to && el.to.displayName)}
-                    </b>
-                    {el.text}
-                  </Typography>
-                ) : (
-                  <>
-                    <Typography sx={{ wordWrap: 'break-word' }}>
+    <div className="chat-main">
+      <Box height="600px" sx={{ overflowY: 'scroll', overflowWrap: 'break-word' }} className="chat-container">
+        <h2 className="chat-title">Чат</h2>
+        {user ? (
+          <>
+            {messages.map((el) => (
+              <Paper sx={{ mb: 2 }} elevation={1} key={Math.random()}>
+                <Grid sx={{ overflow: 'hidden' }} container justifyContent="space-between">
+                  {el.whisper ? (
+                    <Typography sx={{ wordWrap: 'break-word', color: '#D320B4' }}>
                       {dayjs(el.date).format('YYYY-MM-DD HH:mm')} <br />
-                      <b>{el.author.displayName} : </b> {el.text}
+                      <b>
+                        {JSON.stringify(el.to && el.to._id) === JSON.stringify(user._id)
+                          ? 'From ' + el.author.displayName + ': '
+                          : 'to ' + (el.to && el.to.displayName)}
+                      </b>
+                      {el.text}
                     </Typography>
-                    {author && el.author._id !== user._id && (
-                      <Button
-                        onClick={() => {
-                          WhisperSender(el.author._id);
-                        }}
-                      >
-                        отправить свой номер
-                      </Button>
-                    )}
-                  </>
-                )}
-              </Grid>
-            </Paper>
-          ))}
-        </Grid>
-        <Box sx={{ position: 'sticky', bottom: '0px', left: '0px', width: '100%', zIndex: '99', bgcolor: 'FFF' }}>
-          <MessageForm submitFormHandler={MessageSender} />
-        </Box>
-      </div>
-    )
+                  ) : (
+                    <>
+                      <Typography sx={{ wordWrap: 'break-word' }}>
+                        {dayjs(el.date).format('YYYY-MM-DD HH:mm')} <br />
+                        <b>{el.author.displayName} : </b> {el.text}
+                      </Typography>
+                      {author && el.author._id !== user._id && (
+                        <Button
+                          onClick={() => {
+                            WhisperSender(el.author._id);
+                          }}
+                        >
+                          отправить свой номер
+                        </Button>
+                      )}
+                    </>
+                  )}
+                </Grid>
+              </Paper>
+            ))}
+          </>
+        ) : (
+          <h3>Для использования чата войдите в свой аккаунт</h3>
+        )}
+      </Box>
+      <Box
+        sx={{
+          position: 'sticky',
+          bottom: '0px',
+          left: '0px',
+          width: '100%',
+          zIndex: '99',
+          bgcolor: 'FFF',
+        }}
+      >
+        <MessageForm submitFormHandler={MessageSender} />
+      </Box>
+    </div>
   );
 };
 
