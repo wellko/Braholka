@@ -11,7 +11,7 @@ DealsRouter.get('/', async (req, res, next) => {
   try {
     const categoryQuery = req.query.category as string;
     if (categoryQuery) {
-      const dealResponse = await Deal.find({ category: categoryQuery });
+      const dealResponse = await Deal.find({ category: categoryQuery }).populate({ path: 'category' });
       res.send(dealResponse);
     } else {
       const dealResponse = await Deal.find().populate({ path: 'category' });

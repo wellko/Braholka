@@ -4,6 +4,7 @@ import { getDeals } from './DealsThunks';
 import { Container, Grid } from '@mui/material';
 import { selectDeals } from './DealsSlice';
 import DealsCard from './components/DealsCard';
+import SetCategoryForm from './components/SetCategoryForm';
 
 const DealsPage = () => {
   const deals = useAppSelector(selectDeals);
@@ -13,6 +14,7 @@ const DealsPage = () => {
   }, [dispatch]);
   return (
     <Container>
+      <SetCategoryForm />
       <Grid container>
         {deals &&
           deals.map((el) => (
