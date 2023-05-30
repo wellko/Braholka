@@ -2,7 +2,6 @@ import express from 'express';
 import Category from '../models/Category';
 import permit from '../middleware/permit';
 import mongoose from 'mongoose';
-import { CategoryImagesUpload } from '../multer';
 import Deal from '../models/Deal';
 import auth from '../middleware/auth';
 
@@ -17,11 +16,10 @@ CategoriesRouter.get('/', async (req, res, next) => {
   }
 });
 
-CategoriesRouter.post('/', auth, permit('admin'), CategoryImagesUpload.single('image'), async (req, res, next) => {
+CategoriesRouter.post('/', auth, permit('admin'), async (req, res, next) => {
   try {
     const newCategory = await Category.create({
       name: req.body.name,
-      image: req.file && req.file.filename,
     });
     return res.send(newCategory);
   } catch (e) {

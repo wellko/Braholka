@@ -3,7 +3,6 @@ import WebSocket from 'ws';
 
 export interface CategoryType {
   name: string;
-  image: string;
 }
 
 export interface IUser {
@@ -19,9 +18,10 @@ export interface IUser {
 export interface dealType {
   title: string;
   description: string;
-  purchasePrice: number;
+  purchasePrice?: number;
   image: string;
   condition: string;
+  tradeOn?: string;
   category: Schema.Types.ObjectId;
   owner: Schema.Types.ObjectId;
 }

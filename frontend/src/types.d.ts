@@ -48,6 +48,7 @@ export interface CategoryTypeProps {
 
 export interface DealTypeProps {
   _id: string;
+  tradeOn: string;
   title: string;
   description: string;
   purchasePrice: number;
@@ -65,7 +66,6 @@ export interface DealType extends Omit<DealTypeProps, '_id'> {
 
 export interface CategoryType {
   name: string;
-  image: File | null;
 }
 
 export interface MessageType {

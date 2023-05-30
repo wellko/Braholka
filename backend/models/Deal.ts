@@ -15,11 +15,13 @@ const DealSchema = new Schema<dealType>({
   },
   purchasePrice: {
     type: Number,
-    required: true,
     validate: {
-      validator: (value: number) => value > 1,
+      validator: (value: number) => value > 0,
       message: 'Цена должна быть минимум 1сом',
     },
+  },
+  tradeOn: {
+    type: String,
   },
   image: {
     required: true,

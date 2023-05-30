@@ -35,9 +35,10 @@ DealsRouter.post('/', auth, imagesUpload.single('image'), async (req, res, next)
   try {
     const user = (req as RequestWithUser).user;
     const newDeal = await Deal.create({
+      tradeOn: parseInt(req.body.purchasePrice) > 0 ? '' : req.body.tradeOn,
       title: req.body.title,
       description: req.body.description,
-      purchasePrice: parseInt(req.body.purchasePrice),
+      purchasePrice: req.body.tradeOn ? 0 : parseInt(req.body.purchasePrice),
       image: req.file && req.file.filename,
       condition: req.body.condition,
       category: req.body.category,
@@ -59,9 +60,10 @@ DealsRouter.patch('/:id', auth, imagesUpload.single('image'), async (req, res) =
       { _id: req.params.id, owner: user._id },
       {
         $set: {
+          tradeOn: parseInt(req.body.purchasePrice) > 0 ? '' : req.body.tradeOn,
           title: req.body.title,
           description: req.body.description,
-          purchasePrice: parseInt(req.body.purchasePrice),
+          purchasePrice: req.body.tradeOn ? 0 : parseInt(req.body.purchasePrice),
           image: req.file && req.file.filename,
           condition: req.body.condition,
           category: req.body.category,
