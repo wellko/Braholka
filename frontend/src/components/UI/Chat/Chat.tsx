@@ -15,33 +15,39 @@ const Chat = () => {
   const { id } = useParams();
   const deal = useAppSelector(selectDeal);
 
-  const author = user?._id === deal?.owner._id;
+  let author = false;
+
+  if (deal && user) {
+    author = user._id === deal.owner._id;
+  }
 
   useEffect(() => {
-    const connect = () => {
-      ws.current = new WebSocket('ws://localhost:8000/chat/' + id + '/' + user?._id);
-      ws.current.onclose = () => {
-        connect();
+    if (user) {
+      const connect = () => {
+        ws.current = new WebSocket('ws://localhost:8000/chat/' + id + '/' + user._id);
+        ws.current.onclose = () => {
+          connect();
+        };
+        ws.current.onmessage = (event) => {
+          const decodedMessage = JSON.parse(event.data);
+          if (decodedMessage.type === 'EXISTING_MESSAGES') {
+            decodedMessage.payload as MessageType[];
+            setMessages(decodedMessage.payload.reverse());
+          }
+          if (decodedMessage.type === 'NEW_MESSAGE') {
+            decodedMessage.payload as MessageType;
+            setMessages((prevState) => [decodedMessage.payload, ...prevState]);
+          }
+        };
       };
-      ws.current.onmessage = (event) => {
-        const decodedMessage = JSON.parse(event.data);
-        if (decodedMessage.type === 'EXISTING_MESSAGES') {
-          decodedMessage.payload as MessageType[];
-          setMessages(decodedMessage.payload.reverse());
-        }
-        if (decodedMessage.type === 'NEW_MESSAGE') {
-          decodedMessage.payload as MessageType;
-          setMessages((prevState) => [decodedMessage.payload, ...prevState]);
+      connect();
+      return () => {
+        if (ws.current) {
+          ws.current.close();
         }
       };
-    };
-    connect();
-    return () => {
-      if (ws.current) {
-        ws.current.close();
-      }
-    };
-  }, []);
+    }
+  }, [id, user]);
 
   const MessageSender = (arg: string) => {
     if (!ws.current) return;
@@ -71,51 +77,54 @@ const Chat = () => {
   };
 
   return (
-    <div className="chat-main">
-      <Grid
-        item
-        xs={8}
-        height="700px"
-        sx={{ overflowY: 'scroll', overflowWrap: 'break-word' }}
-        className="chat-container"
-      >
-        {messages.map((el) => (
-          <Paper sx={{ mb: 2 }} elevation={1} key={Math.random()}>
-            <Grid sx={{ overflow: 'hidden' }} container justifyContent="space-between">
-              {el.whisper ? (
-                <Typography sx={{ wordWrap: 'break-word', color: '#D320B4' }}>
-                  {dayjs(el.date).format('YYYY-MM-DD HH:mm')} <br />
-                  <b>
-                    {JSON.stringify(el.to!._id) === JSON.stringify(user!._id)
-                      ? 'From ' + el.author.displayName + ': '
-                      : 'to ' + (el.to && el.to.displayName)}
-                  </b>{' '}
-                  {el.text}
-                </Typography>
-              ) : (
-                <>
-                  <Typography sx={{ wordWrap: 'break-word' }}>
-                    {dayjs(el.date).format('YYYY-MM-DD HH:mm')} <br /> <b>{el.author.displayName} : </b> {el.text}
+    user && (
+      <div className="chat-main">
+        <Grid
+          item
+          xs={8}
+          height="700px"
+          sx={{ overflowY: 'scroll', overflowWrap: 'break-word' }}
+          className="chat-container"
+        >
+          {messages.map((el) => (
+            <Paper sx={{ mb: 2 }} elevation={1} key={Math.random()}>
+              <Grid sx={{ overflow: 'hidden' }} container justifyContent="space-between">
+                {el.whisper ? (
+                  <Typography sx={{ wordWrap: 'break-word', color: '#D320B4' }}>
+                    {dayjs(el.date).format('YYYY-MM-DD HH:mm')} <br />
+                    <b>
+                      {JSON.stringify(el.to && el.to._id) === JSON.stringify(user._id)
+                        ? 'From ' + el.author.displayName + ': '
+                        : 'to ' + (el.to && el.to.displayName)}
+                    </b>
+                    {el.text}
                   </Typography>
-                  {author && el.author._id !== user!._id && (
-                    <Button
-                      onClick={() => {
-                        WhisperSender(el.author._id);
-                      }}
-                    >
-                      отправить свой номер
-                    </Button>
-                  )}
-                </>
-              )}
-            </Grid>
-          </Paper>
-        ))}
-      </Grid>
-      <Box sx={{ position: 'sticky', bottom: '0px', left: '0px', width: '100%', zIndex: '99', bgcolor: 'FFF' }}>
-        <MessageForm submitFormHandler={MessageSender} />
-      </Box>
-    </div>
+                ) : (
+                  <>
+                    <Typography sx={{ wordWrap: 'break-word' }}>
+                      {dayjs(el.date).format('YYYY-MM-DD HH:mm')} <br />
+                      <b>{el.author.displayName} : </b> {el.text}
+                    </Typography>
+                    {author && el.author._id !== user._id && (
+                      <Button
+                        onClick={() => {
+                          WhisperSender(el.author._id);
+                        }}
+                      >
+                        отправить свой номер
+                      </Button>
+                    )}
+                  </>
+                )}
+              </Grid>
+            </Paper>
+          ))}
+        </Grid>
+        <Box sx={{ position: 'sticky', bottom: '0px', left: '0px', width: '100%', zIndex: '99', bgcolor: 'FFF' }}>
+          <MessageForm submitFormHandler={MessageSender} />
+        </Box>
+      </div>
+    )
   );
 };
 

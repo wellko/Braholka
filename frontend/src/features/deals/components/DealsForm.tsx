@@ -22,7 +22,7 @@ const DealsForm = () => {
     image: null,
     condition: '',
     category: '',
-    owner: user!._id,
+    owner: user ? user._id : '',
   };
 
   const [state, setState] = useState<DealType>(initialState);
