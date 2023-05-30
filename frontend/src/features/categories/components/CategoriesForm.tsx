@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { CategoryType } from '../../../types';
+import { CategoryMutation } from '../../../types';
 import { useAppDispatch } from '../../../app/hooks';
 import { createCategory } from '../CategoriesThunks';
 import { useNavigate } from 'react-router-dom';
@@ -7,11 +7,11 @@ import { useNavigate } from 'react-router-dom';
 const CategoriesForm = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const initialState: CategoryType = {
+  const initialState: CategoryMutation = {
     name: '',
   };
 
-  const [state, setState] = useState<CategoryType>(initialState);
+  const [state, setState] = useState<CategoryMutation>(initialState);
 
   const onSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
