@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { DealType } from '../../../types';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import { selectUser } from '../../users/UsersSlice';
-import { MenuItem, TextField } from '@mui/material';
+import { FormControlLabel, MenuItem, Switch, TextField } from '@mui/material';
 import { conditionArray } from '../../../constants';
 import FileInput from '../../../components/UI/FileInput/FileInput';
 import { createDeal } from '../DealsThunks';
@@ -22,10 +22,12 @@ const DealsForm = () => {
     image: null,
     condition: '',
     category: '',
+    tradeOn: '',
     owner: user ? user._id : '',
   };
 
   const [state, setState] = useState<DealType>(initialState);
+  const [trade, setTrade] = useState<boolean>(true);
 
   useEffect(() => {
     dispatch(getCategories());
@@ -37,9 +39,20 @@ const DealsForm = () => {
     navigate('/');
   };
 
+  const switcherChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.checked) {
+      setState((prev) => ({ ...prev, tradeOn: '' }));
+    } else {
+      setState((prev) => ({ ...prev, purchasePrice: 0 }));
+    }
+    setTrade(event.target.checked);
+    console.log(state);
+  };
+
   const inputChangeHandler = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = event.target;
     setState((prev) => ({ ...prev, [name]: value }));
+    console.log(state);
   };
 
   const fileInputChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -53,6 +66,10 @@ const DealsForm = () => {
   return (
     <form className="form" onSubmit={onSubmit}>
       <h2>Создать Сделку</h2>
+      <FormControlLabel
+        control={<Switch onChange={switcherChangeHandler} defaultChecked />}
+        label={trade ? 'Выкуп' : 'Обмен'}
+      />
       <div className="form_input_group">
         <input
           name="title"
@@ -97,7 +114,6 @@ const DealsForm = () => {
           </MenuItem>
         ))}
       </TextField>
-
       <TextField
         sx={{ mt: '25px', minWidth: '35%' }}
         select
@@ -114,22 +130,39 @@ const DealsForm = () => {
             </MenuItem>
           ))}
       </TextField>
-
-      <div className="form_input_group">
-        <input
-          name="purchasePrice"
-          type="number"
-          className="form_input"
-          value={state.purchasePrice}
-          placeholder="Цена на выкуп"
-          onChange={inputChangeHandler}
-          min={1}
-          required
-        />
-        <label htmlFor="title" className="form_input_label">
-          Цена :
-        </label>
-      </div>
+      {trade ? (
+        <div className="form_input_group">
+          <input
+            name="purchasePrice"
+            type="number"
+            className="form_input"
+            value={state.purchasePrice}
+            placeholder="Цена на выкуп"
+            onChange={inputChangeHandler}
+            min={1}
+            required
+          />
+          <label htmlFor="title" className="form_input_label">
+            Цена :
+          </label>
+        </div>
+      ) : (
+        <div className="form_input_group">
+          <input
+            name="tradeOn"
+            type="input"
+            className="form_input"
+            placeholder="Обмен на"
+            pattern="^[A-Za-zА-Яа-яЁё]{1}+[A-Za-zА-Яа-яЁё/s]+$"
+            value={state.tradeOn}
+            required
+            onChange={inputChangeHandler}
+          />
+          <label htmlFor="title" className="form_input_label">
+            Обмен :
+          </label>
+        </div>
+      )}
       <FileInput onChange={fileInputChangeHandler} name="image" label="Загрузите картинку" />
       <button className="btn-form btn-create" type="submit">
         Создать
