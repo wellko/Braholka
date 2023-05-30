@@ -8,7 +8,7 @@ import InstagramIcon from '@mui/icons-material/Instagram';
 const Footer = () => {
   return (
     <div>
-      <Box sx={{ flexGrow: 1, mt: 1 }}>
+      <Box sx={{ flexGrow: 1, mt: 2 }}>
         <AppBar position="static" sx={{ bgcolor: '#8707ff', boxShadow: 'inset 0px 0px 10px #FFF' }}>
           <Toolbar sx={{ paddingY: '10px' }}>
             <Container>
