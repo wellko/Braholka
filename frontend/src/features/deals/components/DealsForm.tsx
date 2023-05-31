@@ -40,7 +40,7 @@ const DealsForm = () => {
   }, [dispatch, id]);
 
   useEffect(() => {
-    if (currentDeal) {
+    if (currentDeal && id) {
       setState({
         title: currentDeal.title,
         description: currentDeal.description,
@@ -53,7 +53,7 @@ const DealsForm = () => {
       });
       setTrade(currentDeal.purchasePrice > 0);
     }
-  }, [currentDeal]);
+  }, [currentDeal, id]);
 
   const onSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
