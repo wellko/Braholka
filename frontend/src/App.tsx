@@ -12,6 +12,7 @@ import DealsPage from './features/deals/DealsPage';
 import CategoriesForm from './features/categories/components/CategoriesForm';
 import DealPage from './features/deals/DealPage';
 import MyDealsPage from './features/deals/MyDealsPage';
+import DealsUnpublished from './features/deals/DealsUnpublished';
 
 function App() {
   const user = useAppSelector(selectUser);
@@ -55,6 +56,14 @@ function App() {
             element={
               <ProtectedRoute isAllowed={user && user.role === 'admin'}>
                 <CategoriesForm />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/deals/unPublished"
+            element={
+              <ProtectedRoute isAllowed={user && user.role === 'admin'}>
+                <DealsUnpublished />
               </ProtectedRoute>
             }
           />

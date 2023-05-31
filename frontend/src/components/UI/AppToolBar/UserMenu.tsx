@@ -34,7 +34,7 @@ const UserMenu: React.FC<Props> = ({ user }) => {
         >
           Создать сделку
         </MenuItem>
-        {user.role === 'admin' ? (
+        {user.role === 'admin' && (
           <MenuItem
             onClick={() => {
               navigate('/addCategory');
@@ -42,7 +42,16 @@ const UserMenu: React.FC<Props> = ({ user }) => {
           >
             Создать категорию
           </MenuItem>
-        ) : null}
+        )}
+        {user.role === 'admin' && (
+          <MenuItem
+            onClick={() => {
+              navigate('/deals/unPublished');
+            }}
+          >
+            Не опубликованные
+          </MenuItem>
+        )}
         <MenuItem
           onClick={() => {
             navigate('/myDeals');
