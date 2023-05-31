@@ -14,6 +14,13 @@ DealsRouter.get('/', async (req, res, next) => {
   try {
     const ownerQuery = req.query.owner as string;
     const categoryQuery = req.query.category as string;
+    const unPublished = req.query.published as string;
+    if (unPublished) {
+      const dealResponse = await Deal.find({
+        isPublished: false,
+      }).populate({ path: 'category' });
+      res.send(dealResponse);
+    }
     if (categoryQuery) {
       const dealResponse = await Deal.find({
         category: categoryQuery,
