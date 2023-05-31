@@ -18,6 +18,7 @@ export interface IUser {
 export interface dealType {
   title: string;
   description: string;
+  isPublished: boolean;
   purchasePrice?: number;
   image: string;
   condition: string;

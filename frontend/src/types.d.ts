@@ -47,12 +47,12 @@ export interface GlobalError {
 export interface CategoryTypeProps {
   _id: string;
   name: string;
-  image: string;
 }
 
 export interface DealTypeProps {
   _id: string;
   tradeOn: string;
+  isPublished: boolean;
   title: string;
   description: string;
   purchasePrice: number;

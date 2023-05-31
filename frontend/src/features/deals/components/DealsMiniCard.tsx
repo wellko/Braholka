@@ -31,6 +31,7 @@ const DealsMiniCard: React.FC<Props> = ({ deal }) => {
   return (
     <div className="DealsMiniCard-container">
       <p>{deal.title}</p>
+      {!deal.isPublished && <p>Не опубликовано!</p>}
       <button
         onClick={() => {
           navigate('/deals/' + deal._id + '/edit');

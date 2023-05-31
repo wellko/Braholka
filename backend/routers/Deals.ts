@@ -15,13 +15,16 @@ DealsRouter.get('/', async (req, res, next) => {
     const ownerQuery = req.query.owner as string;
     const categoryQuery = req.query.category as string;
     if (categoryQuery) {
-      const dealResponse = await Deal.find({ category: categoryQuery }).populate({ path: 'category' });
+      const dealResponse = await Deal.find({
+        category: categoryQuery,
+        isPublished: true,
+      }).populate({ path: 'category' });
       res.send(dealResponse);
     } else if (ownerQuery) {
       const dealResponse = await Deal.find({ owner: ownerQuery }).populate({ path: 'category' });
       res.send(dealResponse);
     } else {
-      const dealResponse = await Deal.find().populate({ path: 'category' });
+      const dealResponse = await Deal.find({ isPublished: true }).populate({ path: 'category' });
       res.send(dealResponse);
     }
   } catch (e) {

@@ -16,8 +16,8 @@ const DealSchema = new Schema<dealType>({
   purchasePrice: {
     type: Number,
     validate: {
-      validator: (value: number) => value > 0,
-      message: 'Цена должна быть минимум 1сом',
+      validator: (value: number) => value >= 0,
+      message: 'Цена должна быть положительным числом',
     },
   },
   tradeOn: {
@@ -40,6 +40,11 @@ const DealSchema = new Schema<dealType>({
       validator: async (value: Types.ObjectId) => Category.findById(value),
       message: 'Категория не найдена!',
     },
+  },
+  isPublished: {
+    type: Boolean,
+    required: true,
+    default: false,
   },
   owner: {
     type: Schema.Types.ObjectId,
