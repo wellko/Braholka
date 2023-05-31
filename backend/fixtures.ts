@@ -66,6 +66,7 @@ const run = async () => {
       condition: 'Новое',
       category: pet._id,
       owner: admin._id,
+      isPublished: true,
     },
     {
       title: 'Продам Субару',
@@ -75,6 +76,7 @@ const run = async () => {
       condition: 'Идеальное',
       category: car._id,
       owner: admin._id,
+      isPublished: true,
     },
     {
       title: 'Продам Колу',
@@ -84,6 +86,7 @@ const run = async () => {
       condition: 'Новое',
       category: food._id,
       owner: user._id,
+      isPublished: true,
     },
     {
       title: 'Продам Фанту',
@@ -93,6 +96,7 @@ const run = async () => {
       condition: 'Новое',
       category: food._id,
       owner: user._id,
+      isPublished: true,
     },
     {
       title: 'Обменяю попугая',
@@ -102,6 +106,7 @@ const run = async () => {
       condition: 'Новое',
       category: pet._id,
       owner: user2._id,
+      isPublished: true,
     },
     {
       title: 'Обменяю BMW',
@@ -111,6 +116,7 @@ const run = async () => {
       condition: 'Идеальное',
       category: car._id,
       owner: user2._id,
+      isPublished: true,
     },
   );
 
