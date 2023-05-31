@@ -6,7 +6,8 @@ import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import { deleteDeal, getDealsByOwner } from '../DealsThunks';
 import { selectUser } from '../../users/UsersSlice';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Typography } from '@mui/material';
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid, Typography } from '@mui/material';
+import { apiUrl } from '../../../constants';
 
 interface Props {
   deal: DealTypeProps;
@@ -20,6 +21,7 @@ const DealsMiniCard: React.FC<Props> = ({ deal }) => {
   const onDeleteBtnClick = () => {
     setOpen(true);
   };
+  const imagePath = apiUrl + deal.image;
   const handleConfirm = async () => {
     setOpen(false);
     await dispatch(deleteDeal(deal._id));
@@ -29,20 +31,29 @@ const DealsMiniCard: React.FC<Props> = ({ deal }) => {
   };
 
   return (
-    <div className="DealsMiniCard-container">
-      <p>{deal.title}</p>
-      {!deal.isPublished && <p>Не опубликовано!</p>}
-      <button
-        onClick={() => {
-          navigate('/deals/' + deal._id + '/edit');
-        }}
-        type="button"
-      >
-        <ModeEditIcon />
-      </button>
-      <button onClick={onDeleteBtnClick}>
-        <DeleteIcon />
-      </button>
+    <div className="dealsMiniCard-container">
+      <Grid container justifyContent="space-between">
+        <Grid item>
+          <img className="dealsMiniCard-image" src={imagePath} alt="some picture" />
+        </Grid>
+        <Grid item xs={8} sm={7}>
+          <p>{deal.title}</p>
+          {!deal.isPublished && <p className="deal-color-red">Не опубликовано!</p>}
+        </Grid>
+        <Grid item xs={12} sm={2}>
+          <button
+            onClick={() => {
+              navigate('/deals/' + deal._id + '/edit');
+            }}
+            type="button"
+          >
+            <ModeEditIcon />
+          </button>
+          <button onClick={onDeleteBtnClick}>
+            <DeleteIcon />
+          </button>
+        </Grid>
+      </Grid>
       <Dialog open={open} onClose={() => setOpen(false)}>
         <DialogTitle>Удалить {deal.title}</DialogTitle>
         <DialogContent>

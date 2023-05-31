@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Container } from '@mui/material';
+import { Container, Grid } from '@mui/material';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { selectDeals } from './DealsSlice';
 import { selectUser } from '../users/UsersSlice';
@@ -18,7 +18,17 @@ const MyDealsPage = () => {
   return (
     <Container>
       <h2> Мои Объявления</h2>
-      {deals ? deals.map((el) => <DealsMiniCard deal={el} key={el._id} />) : <h3>У вас нету объявлений</h3>}
+      <Grid container gap={1}>
+        {deals ? (
+          deals.map((el) => (
+            <Grid item xs={12} lg={5} key={el._id}>
+              <DealsMiniCard deal={el} />
+            </Grid>
+          ))
+        ) : (
+          <h3>У вас нету объявлений</h3>
+        )}
+      </Grid>
     </Container>
   );
 };

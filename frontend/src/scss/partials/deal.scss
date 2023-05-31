@@ -1,0 +1,9 @@
+@use "../var/colors" as *;
+
+.deal-color-purple {
+  color: $purple;
+}
+
+.deal-color-red {
+  color: darkred;
+}

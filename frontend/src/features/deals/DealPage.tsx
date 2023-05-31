@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { deleteDeal, getDealsByOwner, getOneDeal, publishDeal } from './DealsThunks';
+import { deleteDeal, getOneDeal, publishDeal } from './DealsThunks';
 import { selectDeal, selectDealsLoading } from './DealsSlice';
 import DotSpinner from '../../components/UI/DotSpinner/DotSpinner';
 import { apiUrl } from '../../constants';
@@ -60,6 +60,7 @@ const DealPage = () => {
           <>
             <Grid item xs={12} md={6}>
               <h2 className="dealPage-header">{deal.title}</h2>
+              {!deal.isPublished && <h3 className="deal-color-red">Не опубликовано</h3>}
               <img src={imagePath} alt="product" className="dealPage-image" />
               <Accordion>
                 <AccordionSummary expandIcon={<QuestionMarkOutlinedIcon />}>
@@ -98,7 +99,7 @@ const DealPage = () => {
       </Grid>
       {user && user.role === 'admin' && deal && !deal.isPublished && (
         <>
-          <Button variant="outlined" color="primary" onClick={publishConfirm}>
+          <Button sx={{ marginX: '10px' }} variant="outlined" color="primary" onClick={publishConfirm}>
             Опубликовать
           </Button>
           <Button variant="outlined" color="warning" onClick={onDeleteBtnClick}>
