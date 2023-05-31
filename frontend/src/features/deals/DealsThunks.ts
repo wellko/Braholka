@@ -33,6 +33,24 @@ export const getDealsByOwner = createAsyncThunk<DealTypeProps[], string>('deals/
   }
 });
 
+export const getUnpublishedDeals = createAsyncThunk<DealTypeProps[]>('deals/getUnpublished', async () => {
+  try {
+    const response = await axiosApi.get<DealTypeProps[]>('deals?published=false');
+    return response.data;
+  } catch {
+    throw new Error();
+  }
+});
+
+export const publishDeal = createAsyncThunk<void, string>('deals/publish', async (id) => {
+  try {
+    const response = await axiosApi.patch('deals/' + id + '/togglePublished');
+    return response.data;
+  } catch {
+    throw new Error();
+  }
+});
+
 export const deleteDeal = createAsyncThunk<GlobalSuccess, string>('deals/delete', async (id) => {
   try {
     const response = await axiosApi.delete('deals/' + id);
