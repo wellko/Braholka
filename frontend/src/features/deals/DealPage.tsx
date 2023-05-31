@@ -1,20 +1,52 @@
-import React, { useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { getOneDeal } from './DealsThunks';
+import { deleteDeal, getDealsByOwner, getOneDeal, publishDeal } from './DealsThunks';
 import { selectDeal, selectDealsLoading } from './DealsSlice';
 import DotSpinner from '../../components/UI/DotSpinner/DotSpinner';
 import { apiUrl } from '../../constants';
 import Chat from '../../components/UI/Chat/Chat';
-import { Accordion, AccordionDetails, AccordionSummary, Container, Grid } from '@mui/material';
+import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+  Button,
+  Container,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  Grid,
+  Typography,
+} from '@mui/material';
 import QuestionMarkOutlinedIcon from '@mui/icons-material/QuestionMarkOutlined';
+import { selectUser } from '../users/UsersSlice';
 
 const DealPage = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
+  const [open, setOpen] = useState(false);
+  const user = useAppSelector(selectUser);
   const dispatch = useAppDispatch();
   const deal = useAppSelector(selectDeal);
   const loading = useAppSelector(selectDealsLoading);
   const imagePath = deal ? apiUrl + deal.image : undefined;
+  const onDeleteBtnClick = () => {
+    setOpen(true);
+  };
+  const handleConfirm = async () => {
+    setOpen(false);
+    if (id) {
+      await dispatch(deleteDeal(id));
+    }
+    navigate('/deals/unPublished');
+  };
+  const publishConfirm = async () => {
+    if (deal) {
+      dispatch(publishDeal(deal._id));
+    }
+    navigate('/deals/unPublished');
+  };
   useEffect(() => {
     if (id) {
       dispatch(getOneDeal(id));
@@ -64,6 +96,28 @@ const DealPage = () => {
           </>
         )}
       </Grid>
+      {user && user.role === 'admin' && deal && !deal.isPublished && (
+        <>
+          <Button variant="outlined" color="primary" onClick={publishConfirm}>
+            Опубликовать
+          </Button>
+          <Button variant="outlined" color="warning" onClick={onDeleteBtnClick}>
+            Удалить
+          </Button>
+        </>
+      )}
+      {deal && (
+        <Dialog open={open} onClose={() => setOpen(false)}>
+          <DialogTitle>Удалить {deal.title}</DialogTitle>
+          <DialogContent>
+            <Typography variant="body1">Вы уверены что хотите удалить {deal.title} ?</Typography>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={() => setOpen(false)}>Отмена</Button>
+            <Button onClick={handleConfirm}>Удалить</Button>
+          </DialogActions>
+        </Dialog>
+      )}
     </Container>
   );
 };
