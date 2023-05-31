@@ -24,6 +24,24 @@ export const getDealsByCategory = createAsyncThunk<DealTypeProps[], string>(
   },
 );
 
+export const getDealsByOwner = createAsyncThunk<DealTypeProps[], string>('deals/getByOwner', async (owner) => {
+  try {
+    const response = await axiosApi.get<DealTypeProps[]>('deals?owner=' + owner);
+    return response.data;
+  } catch {
+    throw new Error();
+  }
+});
+
+export const deleteDeal = createAsyncThunk<GlobalSuccess, string>('deals/delete', async (id) => {
+  try {
+    const response = await axiosApi.delete('deals/' + id);
+    return response.data;
+  } catch {
+    throw new Error();
+  }
+});
+
 export const editDeal = createAsyncThunk<GlobalSuccess, DealTypeWithId>('deals/edit', async (dealData) => {
   const formData = new FormData();
   const keys = Object.keys(dealData) as (keyof DealType)[];
