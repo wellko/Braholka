@@ -11,6 +11,7 @@ import { selectUser } from './features/users/UsersSlice';
 import DealsPage from './features/deals/DealsPage';
 import CategoriesForm from './features/categories/components/CategoriesForm';
 import DealPage from './features/deals/DealPage';
+import MyDealsPage from './features/deals/MyDealsPage';
 
 function App() {
   const user = useAppSelector(selectUser);
@@ -38,6 +39,14 @@ function App() {
             element={
               <ProtectedRoute isAllowed={user && Boolean(user)}>
                 <DealsForm />
+              </ProtectedRoute>
+            }
+          />{' '}
+          <Route
+            path="/myDeals"
+            element={
+              <ProtectedRoute isAllowed={user && Boolean(user)}>
+                <MyDealsPage />
               </ProtectedRoute>
             }
           />

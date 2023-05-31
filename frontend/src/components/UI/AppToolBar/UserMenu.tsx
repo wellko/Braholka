@@ -44,6 +44,13 @@ const UserMenu: React.FC<Props> = ({ user }) => {
           </MenuItem>
         ) : null}
         <MenuItem
+          onClick={() => {
+            navigate('/myDeals');
+          }}
+        >
+          Мои объявления
+        </MenuItem>
+        <MenuItem
           onClick={async () => {
             await dispatch(logoutAction());
             navigate('/');
