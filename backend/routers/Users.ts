@@ -45,7 +45,7 @@ usersRouter.post('/sessions', async (req, res) => {
 usersRouter.delete('/sessions', async (req, res, next) => {
   try {
     const token = req.get('Authorization');
-    const success = { message: 'Успешно' };
+    const success = { message: 'пользователь успешно удалён' };
     if (!token) return res.send(success);
     const user = await User.findOne({ token });
     if (!user) return res.send(success);

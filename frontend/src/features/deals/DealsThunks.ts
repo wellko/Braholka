@@ -42,7 +42,7 @@ export const getUnpublishedDeals = createAsyncThunk<DealTypeProps[]>('deals/getU
   }
 });
 
-export const publishDeal = createAsyncThunk<void, string>('deals/publish', async (id) => {
+export const publishDeal = createAsyncThunk<GlobalSuccess, string>('deals/publish', async (id) => {
   try {
     const response = await axiosApi.patch('deals/' + id + '/togglePublished');
     return response.data;
@@ -81,7 +81,7 @@ export const getOneDeal = createAsyncThunk<DealTypeProps, string>('deals/getOne'
   }
 });
 
-export const createDeal = createAsyncThunk<void, DealType, { rejectValue: ValidationError }>(
+export const createDeal = createAsyncThunk<GlobalSuccess, DealType, { rejectValue: ValidationError }>(
   'deals/createDeal',
   async (dealData, { rejectWithValue }) => {
     try {
@@ -93,7 +93,8 @@ export const createDeal = createAsyncThunk<void, DealType, { rejectValue: Valida
           formData.append(key, value as string | Blob);
         }
       });
-      await axiosApi.post('/deals', formData);
+      const response = await axiosApi.post('/deals', formData);
+      return response.data;
     } catch (e) {
       if (isAxiosError(e) && e.response && e.response.status === 400) {
         return rejectWithValue(e.response.data as ValidationError);

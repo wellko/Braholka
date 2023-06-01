@@ -1,4 +1,4 @@
-import { GlobalError, User, ValidationError } from '../../types';
+import { GlobalError, GlobalSuccess, User, ValidationError } from '../../types';
 import { createSlice } from '@reduxjs/toolkit';
 import { RootState } from '../../app/store';
 import { googleLogin, login, register } from './UsersThunks';
@@ -9,6 +9,7 @@ interface UsersState {
   registerError: ValidationError | null;
   loginLoading: boolean;
   loginError: GlobalError | null;
+  success: GlobalSuccess | null;
 }
 
 const initialState: UsersState = {
@@ -17,6 +18,7 @@ const initialState: UsersState = {
   registerError: null,
   loginLoading: false,
   loginError: null,
+  success: null,
 };
 
 export const UsersSlice = createSlice({
@@ -73,4 +75,5 @@ export const selectRegisterLoading = (state: RootState) => state.users.registerL
 export const selectRegisterError = (state: RootState) => state.users.registerError;
 export const selectLoginLoading = (state: RootState) => state.users.loginLoading;
 export const selectLoginError = (state: RootState) => state.users.loginError;
+export const selectUserSuccess = (state: RootState) => state.users.success;
 export const { logOut } = UsersSlice.actions;

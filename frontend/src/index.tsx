@@ -10,6 +10,7 @@ import { PersistGate } from 'redux-persist/integration/react';
 import { GOOGLE_CLIENT_ID } from './constants';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import { addInterceptors } from './axios-api';
+import { SnackbarProvider } from 'notistack';
 
 addInterceptors(store);
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
@@ -19,7 +20,9 @@ root.render(
       <Provider store={store}>
         <PersistGate persistor={persistor}>
           <Suspense fallback={<CircularProgress />}>
-            <App />
+            <SnackbarProvider>
+              <App />
+            </SnackbarProvider>
           </Suspense>
         </PersistGate>
       </Provider>

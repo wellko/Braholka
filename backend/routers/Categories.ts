@@ -18,10 +18,10 @@ CategoriesRouter.get('/', async (req, res, next) => {
 
 CategoriesRouter.post('/', auth, permit('admin'), async (req, res, next) => {
   try {
-    const newCategory = await Category.create({
+    await Category.create({
       name: req.body.name,
     });
-    return res.send(newCategory);
+    return res.send({ message: 'Категория ' + req.body.name + ' успешно создана' });
   } catch (e) {
     if (e instanceof mongoose.Error.ValidationError) {
       return res.status(400).send(e);
@@ -35,7 +35,7 @@ CategoriesRouter.delete('/:id', auth, permit('admin'), async (req, res, next) =>
   try {
     const deals = await Deal.find({ category: req.params.id });
     if (deals) {
-      res.send({ message: 'в Категории есть Сделки' });
+      res.status(400).send({ message: 'в Категории есть Сделки' });
     } else {
       await Category.deleteOne({ _id: req.params.id });
       res.send({ message: 'успешно удалено' });

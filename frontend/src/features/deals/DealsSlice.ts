@@ -1,13 +1,15 @@
-import { DealTypeProps, ValidationError } from '../../types';
+import { DealTypeProps, GlobalSuccess, ValidationError } from '../../types';
 import { createSlice } from '@reduxjs/toolkit';
 import { RootState } from '../../app/store';
 import {
   createDeal,
+  editDeal,
   getDeals,
   getDealsByCategory,
   getDealsByOwner,
   getOneDeal,
   getUnpublishedDeals,
+  publishDeal,
 } from './DealsThunks';
 
 interface DealsState {
@@ -15,6 +17,7 @@ interface DealsState {
   loading: boolean;
   deal: DealTypeProps | null;
   createError: ValidationError | null;
+  success: GlobalSuccess | null;
 }
 
 const initialState: DealsState = {
@@ -22,6 +25,7 @@ const initialState: DealsState = {
   loading: false,
   deal: null,
   createError: null,
+  success: null,
 };
 
 export const DealsSlice = createSlice({
@@ -49,6 +53,17 @@ export const DealsSlice = createSlice({
     builder.addCase(getDealsByCategory.rejected, (state) => {
       state.loading = false;
     });
+    builder.addCase(createDeal.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(createDeal.fulfilled, (state, { payload: success }) => {
+      state.loading = false;
+      state.success = success;
+    });
+    builder.addCase(createDeal.rejected, (state, { payload: error }) => {
+      state.loading = false;
+      state.createError = error || null;
+    });
     builder.addCase(getDealsByOwner.pending, (state) => {
       state.loading = true;
     });
@@ -56,7 +71,7 @@ export const DealsSlice = createSlice({
       state.loading = false;
       state.deals = deals;
     });
-    builder.addCase(getUnpublishedDeals.rejected, (state) => {
+    builder.addCase(getDealsByOwner.rejected, (state) => {
       state.loading = false;
     });
     builder.addCase(getUnpublishedDeals.pending, (state) => {
@@ -66,12 +81,18 @@ export const DealsSlice = createSlice({
       state.loading = false;
       state.deals = deals;
     });
-    builder.addCase(getDealsByOwner.rejected, (state) => {
+    builder.addCase(getUnpublishedDeals.rejected, (state) => {
       state.loading = false;
     });
-    builder.addCase(createDeal.rejected, (state, { payload: error }) => {
+    builder.addCase(editDeal.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(editDeal.fulfilled, (state, { payload: success }) => {
       state.loading = false;
-      state.createError = error || null;
+      state.success = success;
+    });
+    builder.addCase(editDeal.rejected, (state) => {
+      state.loading = false;
     });
     builder.addCase(getOneDeal.pending, (state) => {
       state.loading = true;
@@ -83,6 +104,16 @@ export const DealsSlice = createSlice({
     builder.addCase(getOneDeal.rejected, (state) => {
       state.loading = false;
     });
+    builder.addCase(publishDeal.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(publishDeal.fulfilled, (state, { payload: success }) => {
+      state.loading = false;
+      state.success = success;
+    });
+    builder.addCase(publishDeal.rejected, (state) => {
+      state.loading = false;
+    });
   },
 });
 
@@ -90,3 +121,5 @@ export const dealsReducer = DealsSlice.reducer;
 export const selectDeals = (state: RootState) => state.deals.deals;
 export const selectDeal = (state: RootState) => state.deals.deal;
 export const selectDealsLoading = (state: RootState) => state.deals.loading;
+export const selectDealCreatingError = (state: RootState) => state.deals.createError;
+export const selectDealSuccess = (state: RootState) => state.deals.success;

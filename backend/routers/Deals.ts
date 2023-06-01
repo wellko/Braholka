@@ -51,7 +51,7 @@ DealsRouter.get('/:id', async (req, res, next) => {
 DealsRouter.post('/', auth, imagesUpload.single('image'), async (req, res, next) => {
   try {
     const user = (req as RequestWithUser).user;
-    const newDeal = await Deal.create({
+    await Deal.create({
       tradeOn: parseInt(req.body.purchasePrice) > 0 ? '' : req.body.tradeOn,
       title: req.body.title,
       description: req.body.description,
@@ -61,7 +61,7 @@ DealsRouter.post('/', auth, imagesUpload.single('image'), async (req, res, next)
       category: req.body.category,
       owner: user._id,
     });
-    return res.send(newDeal);
+    return res.send({ message: 'Сделка ' + req.body.title + ' успешно создана' });
   } catch (error) {
     if (error instanceof mongoose.Error.ValidationError) {
       return res.status(400).send(error);
@@ -124,7 +124,7 @@ DealsRouter.patch('/:id/togglePublished', auth, permit('admin'), async (req, res
     if (deal.modifiedCount < 1) {
       res.status(404).send({ message: 'Объявление не найдено' });
     } else {
-      res.send({ message: 'успешно изменено' });
+      res.send({ message: 'успешно опубликованно' });
     }
   } catch {
     return res.sendStatus(500);
