@@ -3,6 +3,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import { RootState } from '../../app/store';
 import {
   createDeal,
+  deleteDeal,
   editDeal,
   getDeals,
   getDealsByCategory,
@@ -55,6 +56,7 @@ export const DealsSlice = createSlice({
     });
     builder.addCase(createDeal.pending, (state) => {
       state.loading = true;
+      state.createError = null;
     });
     builder.addCase(createDeal.fulfilled, (state, { payload: success }) => {
       state.loading = false;
@@ -86,13 +88,15 @@ export const DealsSlice = createSlice({
     });
     builder.addCase(editDeal.pending, (state) => {
       state.loading = true;
+      state.createError = null;
     });
     builder.addCase(editDeal.fulfilled, (state, { payload: success }) => {
       state.loading = false;
       state.success = success;
     });
-    builder.addCase(editDeal.rejected, (state) => {
+    builder.addCase(editDeal.rejected, (state, { payload: error }) => {
       state.loading = false;
+      state.createError = error || null;
     });
     builder.addCase(getOneDeal.pending, (state) => {
       state.loading = true;
@@ -112,6 +116,16 @@ export const DealsSlice = createSlice({
       state.success = success;
     });
     builder.addCase(publishDeal.rejected, (state) => {
+      state.loading = false;
+    });
+    builder.addCase(deleteDeal.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(deleteDeal.fulfilled, (state, { payload: success }) => {
+      state.loading = false;
+      state.success = success;
+    });
+    builder.addCase(deleteDeal.rejected, (state) => {
       state.loading = false;
     });
   },

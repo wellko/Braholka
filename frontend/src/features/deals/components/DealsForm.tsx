@@ -1,15 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { DealType } from '../../../types';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import { selectUser } from '../../users/UsersSlice';
 import { FormControlLabel, MenuItem, Switch, TextField } from '@mui/material';
-import { conditionArray } from '../../../constants';
+import { apiUrl, conditionArray } from '../../../constants';
 import FileInput from '../../../components/UI/FileInput/FileInput';
 import { createDeal, editDeal, getOneDeal } from '../DealsThunks';
 import { getCategories } from '../../categories/CategoriesThunks';
 import { selectCategories } from '../../categories/CategoriesSlice';
 import { useNavigate, useParams } from 'react-router-dom';
-import { selectDeal } from '../DealsSlice';
+import { selectDeal, selectDealCreatingError } from '../DealsSlice';
 
 const DealsForm = () => {
   const { id } = useParams();
@@ -17,18 +17,22 @@ const DealsForm = () => {
   const currentDeal = useAppSelector(selectDeal);
   const navigate = useNavigate();
   const user = useAppSelector(selectUser);
+  const error = useAppSelector(selectDealCreatingError);
   const categories = useAppSelector(selectCategories);
-  const initialState: DealType = {
-    title: '',
-    description: '',
-    purchasePrice: 0,
-    image: null,
-    isPublished: false,
-    condition: '',
-    category: '',
-    tradeOn: '',
-    owner: user ? user._id : '',
-  };
+  const initialState = useMemo<DealType>(
+    () => ({
+      title: '',
+      description: '',
+      purchasePrice: 0,
+      image: null,
+      isPublished: false,
+      condition: '',
+      category: '',
+      tradeOn: '',
+      owner: user ? user._id : '',
+    }),
+    [user],
+  );
 
   const [state, setState] = useState<DealType>(initialState);
   const [trade, setTrade] = useState<boolean>(false);
@@ -54,17 +58,22 @@ const DealsForm = () => {
         owner: currentDeal.owner._id,
       });
       setTrade(currentDeal.purchasePrice > 0);
+    } else {
+      setState({ ...initialState });
     }
-  }, [currentDeal, id]);
+  }, [currentDeal, id, initialState]);
 
   const onSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
+    let result;
     if (id && currentDeal) {
-      await dispatch(editDeal({ ...state, _id: currentDeal._id }));
+      result = await dispatch(editDeal({ ...state, _id: currentDeal._id }));
     } else {
-      await dispatch(createDeal(state));
+      result = await dispatch(createDeal(state));
     }
-    navigate('/');
+    if (result.meta.requestStatus === 'fulfilled') {
+      await navigate('/');
+    }
   };
 
   const switcherChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -189,7 +198,11 @@ const DealsForm = () => {
           </label>
         </div>
       )}
-      <FileInput onChange={fileInputChangeHandler} name="image" label="Загрузите картинку" />
+      <FileInput onChange={fileInputChangeHandler} name="image" label="Загрузите картинку" error={error} />
+      {state.image && <img src={URL.createObjectURL(state.image)} style={{ width: '100px' }} alt={state.title} />}
+      {currentDeal && currentDeal.image && !state.image && (
+        <img src={apiUrl + currentDeal.image} style={{ width: '100px' }} alt={state.title} />
+      )}
       <button className="btn-form btn-create" type="submit">
         {id ? 'Обновить' : 'Создать'}
       </button>

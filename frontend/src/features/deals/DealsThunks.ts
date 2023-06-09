@@ -60,18 +60,29 @@ export const deleteDeal = createAsyncThunk<GlobalSuccess, string>('deals/delete'
   }
 });
 
-export const editDeal = createAsyncThunk<GlobalSuccess, DealTypeWithId>('deals/edit', async (dealData) => {
-  const formData = new FormData();
-  const keys = Object.keys(dealData) as (keyof DealType)[];
-  keys.forEach((key) => {
-    const value = dealData[key];
-    if (value !== null) {
-      formData.append(key, value as string | Blob);
+export const editDeal = createAsyncThunk<GlobalSuccess, DealTypeWithId, { rejectValue: ValidationError }>(
+  'deals/edit',
+  async (dealData, { rejectWithValue }) => {
+    try {
+      const formData = new FormData();
+      const keys = Object.keys(dealData) as (keyof DealType)[];
+      keys.forEach((key) => {
+        const value = dealData[key];
+        if (value !== null) {
+          formData.append(key, value as string | Blob);
+        }
+      });
+      const response = await axiosApi.patch('/deals/' + dealData._id, formData);
+      return response.data;
+    } catch (e) {
+      if (isAxiosError(e) && e.response && e.response.status === 400) {
+        return rejectWithValue(e.response.data as ValidationError);
+      }
+      throw e;
     }
-  });
-  const response = await axiosApi.patch('/deals/' + dealData._id, formData);
-  return response.data;
-});
+  },
+);
+
 export const getOneDeal = createAsyncThunk<DealTypeProps, string>('deals/getOne', async (id) => {
   try {
     const response = await axiosApi.get<DealTypeProps>('deals/' + id);
