@@ -56,7 +56,7 @@ const Register = () => {
           <LockOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
-          Sign up
+          Регистрация
         </Typography>
         {error && error.errors && error.errors.username ? (
           <Alert severity="error" sx={{ mt: 3, width: '100%' }}>
@@ -74,14 +74,14 @@ const Register = () => {
             <Grid container item xs={12}>
               <div className="inputbox">
                 <input required name="username" value={state.username} onChange={inputChangeHandler} />
-                <span>Username</span>
+                <span>Имя пользователя</span>
                 <i></i>
               </div>
             </Grid>
             <Grid container item xs={12}>
               <div className="inputbox">
                 <input required name="password" value={state.password} onChange={inputChangeHandler} type="password" />
-                <span>Password</span>
+                <span>Пароль</span>
                 <i></i>
               </div>
             </Grid>
@@ -100,20 +100,20 @@ const Register = () => {
             <Grid container item xs={12}>
               <div className="inputbox">
                 <input required name="displayName" value={state.displayName} onChange={inputChangeHandler} />
-                <span>displayName</span>
+                <span>Имя</span>
                 <i></i>
               </div>
             </Grid>
           </Grid>
           <Grid container item xs={12}>
             <button className="btn-form btn-login" type="submit">
-              {loading ? <CircularProgress size={25} /> : 'Sign up'}
+              {loading ? <CircularProgress size={25} /> : 'Регистрация'}
             </button>
           </Grid>
           <Grid container justifyContent="flex-end">
             <Grid item>
               <Link component={RouterLink} to="/login" variant="body2">
-                Already have an account? Sign in
+                Уже есть аккаунт? Войти
               </Link>
             </Grid>
           </Grid>
