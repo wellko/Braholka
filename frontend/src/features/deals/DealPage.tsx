@@ -99,10 +99,16 @@ const DealPage = () => {
       </Grid>
       {user && user.role === 'admin' && deal && !deal.isPublished && (
         <>
-          <Button sx={{ marginX: '10px' }} variant="outlined" color="primary" onClick={publishConfirm}>
+          <Button
+            disabled={loading}
+            sx={{ marginX: '10px' }}
+            variant="outlined"
+            color="primary"
+            onClick={publishConfirm}
+          >
             Опубликовать
           </Button>
-          <Button variant="outlined" color="warning" onClick={onDeleteBtnClick}>
+          <Button disabled={loading} variant="outlined" color="warning" onClick={onDeleteBtnClick}>
             Удалить
           </Button>
         </>

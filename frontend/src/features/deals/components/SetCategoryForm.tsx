@@ -4,10 +4,12 @@ import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import { getCategories } from '../../categories/CategoriesThunks';
 import { selectCategories } from '../../categories/CategoriesSlice';
 import { getDeals, getDealsByCategory } from '../DealsThunks';
+import { selectDealsLoading } from '../DealsSlice';
 
 const SetCategoryForm = () => {
   const dispatch = useAppDispatch();
   const categories = useAppSelector(selectCategories);
+  const loading = useAppSelector(selectDealsLoading);
   const [params, setParams] = useState<string>('');
   useEffect(() => {
     dispatch(getCategories());
@@ -41,7 +43,7 @@ const SetCategoryForm = () => {
           </MenuItem>
         ))}
       </TextField>
-      <button type="submit" className="btn-form">
+      <button disabled={loading} type="submit" className="btn-form">
         Ок
       </button>
     </form>

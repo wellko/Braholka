@@ -9,12 +9,13 @@ import { createDeal, editDeal, getOneDeal } from '../DealsThunks';
 import { getCategories } from '../../categories/CategoriesThunks';
 import { selectCategories } from '../../categories/CategoriesSlice';
 import { useNavigate, useParams } from 'react-router-dom';
-import { selectDeal, selectDealCreatingError } from '../DealsSlice';
+import { selectDeal, selectDealCreatingError, selectDealsLoading } from '../DealsSlice';
 
 const DealsForm = () => {
   const { id } = useParams();
   const dispatch = useAppDispatch();
   const currentDeal = useAppSelector(selectDeal);
+  const loading = useAppSelector(selectDealsLoading);
   const navigate = useNavigate();
   const user = useAppSelector(selectUser);
   const error = useAppSelector(selectDealCreatingError);
@@ -203,7 +204,7 @@ const DealsForm = () => {
       {currentDeal && currentDeal.image && !state.image && (
         <img src={apiUrl + currentDeal.image} style={{ width: '100px' }} alt={state.title} />
       )}
-      <button className="btn-form btn-create" type="submit">
+      <button disabled={loading} className="btn-form btn-create" type="submit">
         {id ? 'Обновить' : 'Создать'}
       </button>
     </form>

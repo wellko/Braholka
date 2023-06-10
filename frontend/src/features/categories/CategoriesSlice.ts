@@ -50,3 +50,4 @@ export const categoryReducer = CategoriesSlice.reducer;
 export const selectCategories = (state: RootState) => state.categories.categories;
 export const selectCategoriesError = (state: RootState) => state.categories.createError;
 export const selectCategoriesSuccess = (state: RootState) => state.categories.success;
+export const selectCategoriesLoading = (state: RootState) => state.categories.loading;

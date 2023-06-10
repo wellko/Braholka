@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import { CategoryMutation } from '../../../types';
-import { useAppDispatch } from '../../../app/hooks';
+import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import { createCategory } from '../CategoriesThunks';
 import { useNavigate } from 'react-router-dom';
+import { selectCategoriesLoading } from '../CategoriesSlice';
 
 const CategoriesForm = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const loading = useAppSelector(selectCategoriesLoading);
   const initialState: CategoryMutation = {
     name: '',
   };
@@ -42,7 +44,7 @@ const CategoriesForm = () => {
           Название :
         </label>
       </div>
-      <button className="btn-form btn-create" type="submit">
+      <button disabled={loading} className="btn-form btn-create" type="submit">
         Создать
       </button>
     </form>
